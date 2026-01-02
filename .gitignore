@@ -1,2 +1,2 @@
-build
-forge.egg-info
+build/
+forge.egg-info/

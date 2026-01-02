@@ -1,0 +1,11 @@
+[project]
+name = "forge"
+version = "0.0.1"
+description = "a local execution system that decides whether to run a task based on evidence."
+readme = "ReadME.md"
+maintainers = [
+    {name = "Vishesh Agarwal"}
+]
+
+[project.scripts]
+forge = "forge.cli:main"

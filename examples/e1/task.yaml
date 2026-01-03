@@ -1,0 +1,7 @@
+task:
+  name: e1
+  command: python generate.py
+  input:
+    - input.txt
+  output:
+    - output.txt

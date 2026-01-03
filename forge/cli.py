@@ -1,4 +1,5 @@
 import argparse
+from .hasher import hashContent
 
 def add(args):
     print(args.x + args.y)
@@ -17,6 +18,10 @@ def divide(args):
 
 def build(args):
     print("Building...")
+
+def hash(args):
+    
+    print(hashContent(args.fileName))
 
 def main():
     parser = argparse.ArgumentParser(prog="forge", description="Forge CLI Tool")
@@ -46,6 +51,9 @@ def main():
     com_p = sub_parser.add_parser("build")
     com_p.set_defaults(func=build)
     
+    hash_p = sub_parser.add_parser("hash")
+    hash_p.add_argument("fileName", type=str)
+    hash_p.set_defaults(func=hash)
 
     args = parser.parse_args()
     args.func(args)

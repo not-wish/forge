@@ -6,3 +6,4 @@ task:
     - input.txt
   outputs:
     - output.txt
+    - output1.txt

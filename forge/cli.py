@@ -1,5 +1,6 @@
 import argparse
 from .hasher import hashContent
+from .task import build
 
 def add(args):
     print(args.x + args.y)
@@ -16,8 +17,8 @@ def divide(args):
     else:
         print("Division by Zero: 0")
 
-def build(args):
-    print("Building...")
+def buildHelp(args):
+    build(args.taskName)
 
 def hash(args):
     
@@ -49,7 +50,8 @@ def main():
     div_p.set_defaults(func=divide)
 
     com_p = sub_parser.add_parser("build")
-    com_p.set_defaults(func=build)
+    com_p.add_argument("taskName", type=str)
+    com_p.set_defaults(func=buildHelp)
     
     hash_p = sub_parser.add_parser("hash")
     hash_p.add_argument("fileName", type=str)

@@ -3,6 +3,7 @@ import json
 from .hasher import hashContent
 import subprocess
 from .cache import catch
+import os
 
 '''
 cache data model 
@@ -19,10 +20,10 @@ cache data model
 ]
 '''
 
-def task(taskName: str):
+def build(taskName: str):
 
     with open("task.yaml", "r") as f:
-        task = yaml.safe_load(f)
+        task = yaml.safe_load(f)["task"]
 
     if (task["name"] == taskName):
         print(f"Task: {taskName} found!\n")
@@ -32,15 +33,24 @@ def task(taskName: str):
         for i in task["inputs"]:
             curHash.append(hashContent(i))
 
-        # check with cache
-        with open("cache.json", "r") as c:
-            jsonData = c.read()
+        flag = False
 
-        cache = json.loads(jsonData)[0]
-        # skip if matched
-        if (cache[input] == len(curHash) and set(cache["inputHash"]) == set(curHash)):
-            print("\n-----------------\nSkipping command because there has been no changes in any input files\n-----------------\n")
-        else:
+        if (os.path.exists("cache.json")):
+                # check with cache
+            with open("cache.json", "r") as c:
+                jsonData = c.read()
+
+            cache = json.loads(jsonData)
+            # skip if matched
+            if (cache["input"] == len(curHash) and set(cache["inputHash"]) == set(curHash)):
+                print("\n-----------------\nSkipping command because there has been no changes in any input files\n-----------------\n")
+                
+                if (all(os.path.exists(o) for o in task["outputs"])):
+                    flag = True
+                else:
+                    print("\n-----------------\nRerunning command because some output files are missing in the directory\n-----------------\n")
+
+        if not flag:
         # execute command if not matched
             result = subprocess.run(
                 task["command"],

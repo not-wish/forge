@@ -9,11 +9,11 @@ def catch(taskName: str, input: int, output: int, inputHash: list[str], outputHa
         "output": output,
         "inputHash": inputHash,
         "outputHash": outputHash,
-        "timestamp": datetime.datetime.now
+        "timestamp": str(datetime.datetime.now)
     }
 
     with open("cache.json", "w") as f:
-        content = json.dump(data)
-        f.write(content)
+        json.dump(data, f)
+        # f.write(content)
 
         

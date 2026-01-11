@@ -24,7 +24,15 @@ def build(taskName: str):
 
     try:
         with open("task.yaml", "r") as f:
-            task = yaml.safe_load(f)["task"]
+            try:
+                task = yaml.safe_load(f)["task"]
+            except yaml.YAMLError as e:
+                print(f"Error parsing task.yaml: {e}")
+                return
+            except Exception as e:
+                print(f"Unexpected error: {e}")
+                return
+            
 
         if (task["name"] == taskName):
             print(f"Task: {taskName} found!\n")
@@ -41,15 +49,18 @@ def build(taskName: str):
                 with open("cache.json", "r") as c:
                     jsonData = c.read()
 
-                cache = json.loads(jsonData)
+                try:
+                    cache = json.loads(jsonData)
                 # skip if matched
-                if (cache["input"] == len(curHash) and set(cache["inputHash"]) == set(curHash)):
-                    print("\n-----------------\nSkipping command because there has been no changes in any input files\n-----------------\n")
-                    
-                    if (all(os.path.exists(o) for o in task["outputs"])):
-                        flag = True
-                    else:
-                        print("\n-----------------\nRerunning command because some output files are missing in the directory\n-----------------\n")
+                    if (cache["input"] == len(curHash) and set(cache["inputHash"]) == set(curHash)):
+                        print("\n-----------------\nSkipping command because there has been no changes in any input files\n-----------------\n")
+                        
+                        if (all(os.path.exists(o) for o in task["outputs"])):
+                            flag = True
+                        else:
+                            print("\n-----------------\nRerunning command because some output files are missing in the directory\n-----------------\n")
+                except json.JSONDecodeError:
+                    print("------------------------------\nError decoding cache.json.\nRerunning the command and generating a cache.\n------------------------------\n")
 
             if not flag:
             # execute command if not matched

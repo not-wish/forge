@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import json
 
 def catch(taskName: str, input: int, output: int, inputHash: list[str], outputHash: list[str]):
@@ -9,7 +9,7 @@ def catch(taskName: str, input: int, output: int, inputHash: list[str], outputHa
         "output": output,
         "inputHash": inputHash,
         "outputHash": outputHash,
-        "timestamp": str(datetime.datetime.now)
+        "timestamp": str(datetime.now.strftime("%d/%m/%Y %H:%M:%S"))
     }
 
     with open("cache.json", "w") as f:

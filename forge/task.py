@@ -77,7 +77,8 @@ def build(taskName: str):
                 outputHash = list()
 
                 for i in task["outputs"]:
-                    outputHash.append(hashContent(i))
+                    iHash = hashContent(i)
+                    outputHash.append(iHash) if iHash else None
 
                 catch(taskName, len(curHash), len(outputHash) , curHash, outputHash)
 
